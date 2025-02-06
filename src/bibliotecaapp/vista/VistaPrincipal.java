@@ -263,34 +263,28 @@ public class VistaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_botonRegistrarActionPerformed
 
     private void botonIniciarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonIniciarSesionActionPerformed
-        String username = campoUsernameLogin.getText().trim();
-        String password = new String(campoPasswordLogin.getText());
+         String username = campoUsernameLogin.getText().trim();
+    String password = new String(campoPasswordLogin.getText());
 
-        Usuario usuario = controladorUsuario.iniciarSesion(username, password);
-
-        if (usuario != null) {
-            JOptionPane.showMessageDialog(this, "Bienvenido, " + usuario.getNombre());
-
-            // Según el rol, se mostrará el dashboard correspondiente
-            if (usuario.getRol().equalsIgnoreCase("admin")) {
-                // Dashboard para admin: CRUD de libros
-                DashboardLibros dashboardAdmin = new DashboardLibros();
-                jTabbedPane1.addTab("Dashboard Admin", dashboardAdmin);
-                jTabbedPane1.setSelectedComponent(dashboardAdmin);
-            } else if (usuario.getRol().equalsIgnoreCase("cliente")) {
-                // Dashboard para cliente: lista de libros para préstamo
-                DashboardCliente dashboardCliente = new DashboardCliente();
-                jTabbedPane1.addTab("Dashboard Cliente", dashboardCliente);
-                jTabbedPane1.setSelectedComponent(dashboardCliente);
-            }
-            // (Opcional) Puedes remover las pestañas de Registro y Login:
-            // jTabbedPane.removeTabAt(0); jTabbedPane.removeTabAt(0);
-        } else {
-            JOptionPane.showMessageDialog(this, "Credenciales inválidas.", "Error", JOptionPane.ERROR_MESSAGE);
-        }
+    Usuario usuario = controladorUsuario.iniciarSesion(username, password);
+    
+    if (usuario != null) {
+        JOptionPane.showMessageDialog(this, "Bienvenido, " + usuario.getNombre());
         
-        campoUsernameLogin.setText("");
-        campoPasswordLogin.setText("");
+        if (usuario.getRol().equalsIgnoreCase("admin")) {
+            DashboardLibros dashboardAdmin = new DashboardLibros();
+            jTabbedPane1.addTab("Dashboard Admin", dashboardAdmin);
+            jTabbedPane1.setSelectedComponent(dashboardAdmin);
+        } else if (usuario.getRol().equalsIgnoreCase("cliente")) {
+            // Importante: se pasa el usuario autenticado al constructor
+            DashboardCliente dashboardCliente = new DashboardCliente(usuario);
+            jTabbedPane1.addTab("Dashboard Cliente", dashboardCliente);
+            jTabbedPane1.setSelectedComponent(dashboardCliente);
+        }
+    } else {
+        JOptionPane.showMessageDialog(this, "Credenciales inválidas.", "Error", JOptionPane.ERROR_MESSAGE);
+    }
+        
     }//GEN-LAST:event_botonIniciarSesionActionPerformed
 
     /**

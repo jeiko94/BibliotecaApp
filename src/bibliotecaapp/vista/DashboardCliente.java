@@ -6,6 +6,7 @@ package bibliotecaapp.vista;
 
 import bibliotecaapp.controlador.ControladorLibro;
 import bibliotecaapp.modelo.Libro;
+import bibliotecaapp.modelo.Usuario;
 import java.awt.Container;
 import javax.swing.JOptionPane;
 import javax.swing.JTabbedPane;
@@ -17,22 +18,56 @@ import javax.swing.table.DefaultTableModel;
  */
 public class DashboardCliente extends javax.swing.JPanel {
 
-    private DefaultTableModel modelo;
+    private Usuario usuario;
     private ControladorLibro controladorLibro;
 
-    public DashboardCliente() {
-        initComponents();
-        controladorLibro = new ControladorLibro();
-        modelo = (DefaultTableModel) tablaLibrosCliente.getModel();
-        modelo.setColumnIdentifiers(new Object[]{"Título", "Autor", "ISBN"});
+    // Modelos para las tablas
+    private DefaultTableModel modeloDisponibles;
+    private DefaultTableModel modeloPrestados;
+    private DefaultTableModel modeloDevueltos;
 
-        actualizarTabla();
+    public DashboardCliente(Usuario usuario) {
+        initComponents();
+        this.usuario = usuario;
+
+        // Usamos la misma instancia compartida de libros (por ejemplo, con una lista estática)
+        controladorLibro = new ControladorLibro();
+
+        // Configurar modelos de tabla (se asume que has colocado tres JTables en un JTabbedPane)
+        // Por ejemplo, los nombres de variable de los JTables son:
+        //   tablaLibrosDisponibles, tablaLibrosPrestados y tablaLibrosDevueltos.
+        modeloDisponibles = (DefaultTableModel) tablaLibrosDisponibles.getModel();
+        modeloPrestados = (DefaultTableModel) tablaLibrosPrestados.getModel();
+        modeloDevueltos = (DefaultTableModel) tablaLibrosDevueltos.getModel();
+
+        modeloDisponibles.setColumnIdentifiers(new Object[]{"Título", "Autor", "ISBN"});
+        modeloPrestados.setColumnIdentifiers(new Object[]{"Título", "Autor", "ISBN"});
+        modeloDevueltos.setColumnIdentifiers(new Object[]{"Título", "Autor", "ISBN"});
+
+        actualizarTablaDisponibles();
+        actualizarTablaPrestados();
+        actualizarTablaDevueltos();
     }
 
-    private void actualizarTabla() {
-        modelo.setRowCount(0);
+    // Métodos para actualizar cada tabla (se explican a continuación)
+    private void actualizarTablaDisponibles() {
+        modeloDisponibles.setRowCount(0);
         for (Libro libro : controladorLibro.getListaLibros()) {
-            modelo.addRow(new Object[]{libro.getTitulo(), libro.getAutor(), libro.getIsbn()});
+            modeloDisponibles.addRow(new Object[]{libro.getTitulo(), libro.getAutor(), libro.getIsbn()});
+        }
+    }
+
+    private void actualizarTablaPrestados() {
+        modeloPrestados.setRowCount(0);
+        for (Libro libro : usuario.getLibrosPrestados()) {
+            modeloPrestados.addRow(new Object[]{libro.getTitulo(), libro.getAutor(), libro.getIsbn()});
+        }
+    }
+
+    private void actualizarTablaDevueltos() {
+        modeloDevueltos.setRowCount(0);
+        for (Libro libro : usuario.getLibrosDevueltos()) {
+            modeloDevueltos.addRow(new Object[]{libro.getTitulo(), libro.getAutor(), libro.getIsbn()});
         }
     }
 
@@ -45,16 +80,23 @@ public class DashboardCliente extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
+        jTabbedPane1 = new javax.swing.JTabbedPane();
+        jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        tablaLibrosCliente = new javax.swing.JTable();
+        tablaLibrosDisponibles = new javax.swing.JTable();
         botonPedirPrestado = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
         botonCerrarSesion = new javax.swing.JButton();
+        jPanel2 = new javax.swing.JPanel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        tablaLibrosPrestados = new javax.swing.JTable();
+        jLabel2 = new javax.swing.JLabel();
+        botonDevolverLibro = new javax.swing.JButton();
+        jPanel3 = new javax.swing.JPanel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        tablaLibrosDevueltos = new javax.swing.JTable();
 
-        jLabel1.setText("Catálogo de Libros");
-
-        tablaLibrosCliente.setModel(new javax.swing.table.DefaultTableModel(
+        tablaLibrosDisponibles.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -65,9 +107,7 @@ public class DashboardCliente extends javax.swing.JPanel {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane2.setViewportView(tablaLibrosCliente);
-
-        jScrollPane1.setViewportView(jScrollPane2);
+        jScrollPane1.setViewportView(tablaLibrosDisponibles);
 
         botonPedirPrestado.setText("Pedir Prestado");
         botonPedirPrestado.addActionListener(new java.awt.event.ActionListener() {
@@ -76,6 +116,8 @@ public class DashboardCliente extends javax.swing.JPanel {
             }
         });
 
+        jLabel1.setText("Libros disponibles");
+
         botonCerrarSesion.setText("Cerrar sesión");
         botonCerrarSesion.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -83,55 +125,201 @@ public class DashboardCliente extends javax.swing.JPanel {
             }
         });
 
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGap(233, 233, 233)
+                .addComponent(botonPedirPrestado)
+                .addContainerGap(189, Short.MAX_VALUE))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel1)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(botonCerrarSesion)
+                .addGap(63, 63, 63))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 462, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(29, 29, 29)
+                .addComponent(jLabel1)
+                .addGap(22, 22, 22)
+                .addComponent(botonCerrarSesion)
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(45, 45, 45)
+                .addComponent(botonPedirPrestado)
+                .addContainerGap(42, Short.MAX_VALUE))
+        );
+
+        jTabbedPane1.addTab("Disponibles", jPanel1);
+
+        tablaLibrosPrestados.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane2.setViewportView(tablaLibrosPrestados);
+
+        jLabel2.setText("Libros Prestados");
+
+        botonDevolverLibro.setText("Devolver");
+        botonDevolverLibro.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonDevolverLibroActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(219, 219, 219)
+                        .addComponent(jLabel2)
+                        .addGap(0, 217, Short.MAX_VALUE))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(botonDevolverLibro)
+                .addGap(252, 252, 252))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(23, 23, 23)
+                .addComponent(jLabel2)
+                .addGap(72, 72, 72)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 202, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(45, 45, 45)
+                .addComponent(botonDevolverLibro)
+                .addContainerGap(44, Short.MAX_VALUE))
+        );
+
+        jTabbedPane1.addTab("Prestados", jPanel2);
+
+        tablaLibrosDevueltos.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane3.setViewportView(tablaLibrosDevueltos);
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(19, 19, 19)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 503, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(92, 92, 92)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 209, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(124, Short.MAX_VALUE))
+        );
+
+        jTabbedPane1.addTab("Devueltos", jPanel3);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(148, 148, 148)
-                        .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 91, Short.MAX_VALUE)
-                        .addComponent(botonCerrarSesion)))
-                .addContainerGap())
-            .addGroup(layout.createSequentialGroup()
-                .addGap(28, 28, 28)
-                .addComponent(botonPedirPrestado)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(jTabbedPane1)
+                .addGap(47, 47, 47))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(17, 17, 17)
-                .addComponent(jLabel1)
-                .addGap(11, 11, 11)
-                .addComponent(botonCerrarSesion)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 36, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(26, 26, 26)
-                .addComponent(botonPedirPrestado)
-                .addContainerGap(193, Short.MAX_VALUE))
+                .addGap(19, 19, 19)
+                .addComponent(jTabbedPane1)
+                .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 
     private void botonPedirPrestadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonPedirPrestadoActionPerformed
-        int filaSeleccionada = tablaLibrosCliente.getSelectedRow();
-        if (filaSeleccionada >= 0) {
-            String titulo = modelo.getValueAt(filaSeleccionada, 0).toString();
-            JOptionPane.showMessageDialog(this, "Has solicitado el préstamo del libro: " + titulo);
-            // Aquí podrías implementar la lógica para registrar el préstamo.
-        } else {
-            JOptionPane.showMessageDialog(this, "Seleccione un libro para pedir prestado.", "Error", JOptionPane.ERROR_MESSAGE);
+        int filaSeleccionada = tablaLibrosDisponibles.getSelectedRow();
+        if (filaSeleccionada < 0) {
+            JOptionPane.showMessageDialog(this, "Seleccione un libro disponible", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        // Se asume que la columna 2 contiene el ISBN
+        String isbn = modeloDisponibles.getValueAt(filaSeleccionada, 2).toString();
+
+        // Verificar si el libro ya está en la lista de prestados
+        for (Libro l : usuario.getLibrosPrestados()) {
+            if (l.getIsbn().equals(isbn)) {
+                JOptionPane.showMessageDialog(this, "Ya tienes prestado este libro", "Información", JOptionPane.INFORMATION_MESSAGE);
+                return;
+            }
+        }
+
+        // Si no se encuentra, se añade a la lista de libros prestados
+        Libro libroSeleccionado = controladorLibro.buscarLibroPorISBN(isbn);
+        if (libroSeleccionado != null) {
+            usuario.getLibrosPrestados().add(libroSeleccionado);
+            JOptionPane.showMessageDialog(this, "Libro prestado correctamente");
+            actualizarTablaPrestados();
         }
     }//GEN-LAST:event_botonPedirPrestadoActionPerformed
 
+    private void botonDevolverLibroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonDevolverLibroActionPerformed
+        int filaSeleccionada = tablaLibrosPrestados.getSelectedRow();
+        if (filaSeleccionada < 0) {
+            JOptionPane.showMessageDialog(this, "Seleccione un libro para devolver", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Se asume que la columna 2 contiene el ISBN
+        String isbn = modeloPrestados.getValueAt(filaSeleccionada, 2).toString();
+
+        Libro libroADevolver = null;
+        for (Libro l : usuario.getLibrosPrestados()) {
+            if (l.getIsbn().equals(isbn)) {
+                libroADevolver = l;
+                break;
+            }
+        }
+        if (libroADevolver != null) {
+            usuario.getLibrosPrestados().remove(libroADevolver);
+            usuario.getLibrosDevueltos().add(libroADevolver);
+            JOptionPane.showMessageDialog(this, "Libro devuelto correctamente");
+            actualizarTablaPrestados();
+            actualizarTablaDevueltos();
+        }
+    }//GEN-LAST:event_botonDevolverLibroActionPerformed
+
     private void botonCerrarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonCerrarSesionActionPerformed
-        int confirmacion = JOptionPane.showConfirmDialog(this,
-            "¿Desea cerrar sesión?", "Cerrar sesión", JOptionPane.YES_NO_OPTION);
+                int confirmacion = JOptionPane.showConfirmDialog(this,
+                "¿Desea cerrar sesión?", "Cerrar sesión", JOptionPane.YES_NO_OPTION);
         if (confirmacion == JOptionPane.YES_OPTION) {
             // Se obtiene el contenedor padre, que es el JTabbedPane donde está agregado este panel.
             Container parent = this.getParent();
@@ -148,10 +336,19 @@ public class DashboardCliente extends javax.swing.JPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton botonCerrarSesion;
+    private javax.swing.JButton botonDevolverLibro;
     private javax.swing.JButton botonPedirPrestado;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTable tablaLibrosCliente;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JTable tablaLibrosDevueltos;
+    private javax.swing.JTable tablaLibrosDisponibles;
+    private javax.swing.JTable tablaLibrosPrestados;
     // End of variables declaration//GEN-END:variables
 }
