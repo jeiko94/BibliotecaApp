@@ -3,11 +3,22 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+<<<<<<< HEAD
             <file>file:/C:/Users/alhej/Desktop/proyecto%20%20java/BibliotecaApp/src/img/JPanelConFondo.java</file>
             <file>file:/C:/Users/alhej/Desktop/proyecto%20%20java/BibliotecaApp/src/bibliotecaapp/vista/DashboardLibros.java</file>
             <file>file:/C:/Users/alhej/Desktop/proyecto%20%20java/BibliotecaApp/src/bibliotecaapp/BibliotecaApp.java</file>
             <file>file:/C:/Users/alhej/Desktop/proyecto%20%20java/BibliotecaApp/src/bibliotecaapp/vista/VistaPrincipal.java</file>
             <file>file:/C:/Users/alhej/Desktop/proyecto%20%20java/BibliotecaApp/src/bibliotecaapp/vista/DashboardCliente.java</file>
+=======
+<<<<<<< HEAD
+            <file>file:/C:/Users/Usuario/Documents/NetBeansProjects/BibliotecaApp/src/bibliotecaapp/vista/VistaPrincipal.java</file>
+            <file>file:/C:/Users/Usuario/Documents/NetBeansProjects/BibliotecaApp/src/bibliotecaapp/vista/DashboardCliente.java</file>
+=======
+            <file>file:/C:/Users/yeisson.villamil/OneDrive%20-%20MVM%20Ingenieria%20de%20Software/Escritorio/Carpetas/IUDC/Tercer%20semestre/POO%20Java/BibliotecaApp/src/bibliotecaapp/vista/DashboardLibros.java</file>
+            <file>file:/C:/Users/yeisson.villamil/OneDrive%20-%20MVM%20Ingenieria%20de%20Software/Escritorio/Carpetas/IUDC/Tercer%20semestre/POO%20Java/BibliotecaApp/src/bibliotecaapp/vista/VistaPrincipal.java</file>
+            <file>file:/C:/Users/yeisson.villamil/OneDrive%20-%20MVM%20Ingenieria%20de%20Software/Escritorio/Carpetas/IUDC/Tercer%20semestre/POO%20Java/BibliotecaApp/src/bibliotecaapp/vista/DashboardCliente.java</file>
+>>>>>>> 116e5f17999bf611dedfedfa4cc80713a942ed5e
+>>>>>>> 0c8f4e87bf8c34ca1df60535ee0fe2152eb81249
         </group>
     </open-files>
 </project-private>
