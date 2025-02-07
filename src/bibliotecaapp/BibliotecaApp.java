@@ -22,6 +22,8 @@ public class BibliotecaApp {
                 new VistaPrincipal().setVisible(true);
             }
         });
+        
+    
     }
     
 }
